@@ -7,6 +7,8 @@ Thumbs.db
 *.aux
 *.log
 *.out
+*.pyc
+__pycache__/
 outputs/*
 !outputs/.gitkeep
 data/processed/*
