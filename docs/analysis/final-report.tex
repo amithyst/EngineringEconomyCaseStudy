@@ -1,5 +1,7 @@
 \documentclass[11pt,a4paper]{ctexart}
 \usepackage[a4paper,margin=1.35cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -15,6 +17,14 @@
 \usepackage{float}
 \usepackage{setspace}
 \usepackage{caption}
+
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+\setCJKmainfont{Noto Serif CJK SC}
+\setCJKsansfont{Noto Sans CJK SC}
+\setCJKmonofont{Noto Sans Mono CJK SC}
+\xeCJKsetup{PunctStyle=kaiming, CJKmath=true}
 
 \hypersetup{colorlinks=true,linkcolor=black,urlcolor=black}
 \pagestyle{fancy}
@@ -60,7 +70,7 @@
 \begin{center}
   {\fontsize{18}{21}\selectfont\bfseries\color{titleblue} 宁波怡丰汇商业项目案例研究报告}\\[6pt]
   {\small 工程经济学 Case Study}\\[4pt]
-  {\small 姓名与学号：\texttt{[待填写组员姓名与学号]}}
+  {\small 姓名与学号：杜楷劼 2025316285 \quad 李博文 2025316286 \quad 王一燚 2025316289}
 \end{center}
 
 \vspace{3pt}
