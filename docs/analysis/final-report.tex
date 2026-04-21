@@ -128,13 +128,17 @@ P_t = F_t(P/F,12\%,N_t)
 \]
 其中，\texttt{2026}、\texttt{2027}、\texttt{2028}、\texttt{2029} 分别对应 \(N=1,2,3,4\)。退出价值的折现同样采用 \((P/F,12\%,4)\) 因子；若将 \texttt{2029} 年后的稳定现金流理解为永续系列，则本质上相当于先做资本化，再折现回期初。
 
-合理收购价按题目给定的 \texttt{MARR = 12\%} 反推：
+合理收购价按工程经济学标准符号应先写为：
+\[
+P_0=\frac{\sum_{t=2026}^{2029} \text{ATCF}_t(P/F,12\%,N_t)+\text{TV}_{2029}(P/F,12\%,4)-C_{\text{open}}-C_{\text{other}}}{1+\tau}
+\]
+代入本题参数后，可写成：
 \[
 \text{Purchase Price}=\frac{\sum_{t=2026}^{2029}\frac{\text{ATCF}_{t}}{(1+12\%)^{t-2025}}+\frac{\text{TV}_{2029}}{(1+12\%)^4}-\text{Opening Cost}-\text{Other Fees}}{1+3\%}
 \]
-用工程经济学标准符号可进一步写成：
+进一步代入计算结果，有：
 \[
-P_0=\frac{\sum_{t=2026}^{2029} \text{ATCF}_t(P/F,12\%,N_t)+\text{TV}_{2029}(P/F,12\%,4)-C_{\text{open}}-C_{\text{other}}}{1+\tau}
+P_0 \approx 3.33 \text{ 亿元}
 \]
 其中，\(\tau=3\%\) 为契税税率。由于本题退出价值采用永续资本化而非有限年金，因此这里不直接使用 \((P/A,i,N)\) 因子；但若把稳定经营期截断为有限持有期，也可以用 \((P/A,i,N)\) 对年等额净现金流做近似表示。
 
@@ -199,7 +203,7 @@ P_0=\frac{\sum_{t=2026}^{2029} \text{ATCF}_t(P/F,12\%,N_t)+\text{TV}_{2029}(P/F,
 \[
 \text{PW(benefits)} \quad \text{vs.} \quad \text{PW(costs)}
 \]
-并通过令项目在 \texttt{MARR = 12\%} 下的净现值为零，反推出允许支付的最高收购对价。
+并通过令项目在 \texttt{MARR = 12\%} 下的净现值为零，反推出允许支付的最高收购对价；在本题中，这个上限对应约 \textbf{3.33 亿元}。
 
 \begin{table}[H]
   \centering
