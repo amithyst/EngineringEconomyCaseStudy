@@ -42,3 +42,9 @@ Build a defendable investment recommendation for the Ningbo Yifenghui shopping m
 - Assignment brief: `docs/assignment/EE2025 Case Study.docx`
 - Source workbook: `data/raw/EE2025 Case Study Sheet.xlsm`
 - Original archive: `data/raw/CaseStudy.zip`
+
+## Final Submission Paths
+
+- PDF report: `outputs/submission/EE2025_Case_Study_Report.pdf`
+- Excel calculations: `outputs/submission/EE2025_Case_Study_Calculations.xlsx`
+- Submission archive: `outputs/submission/EE2025_Case_Study_Submission.zip`
