@@ -1,5 +1,5 @@
 \documentclass[11pt,a4paper]{ctexart}
-\usepackage[a4paper,margin=1.35cm]{geometry}
+\usepackage[a4paper,margin=1.55cm]{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
+\usepackage{amsmath}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins}
 \usepackage{fancyhdr}
@@ -41,7 +42,7 @@
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
-\setstretch{1.06}
+\setstretch{1.08}
 \captionsetup{font=small}
 
 \titleformat{\section}{\large\bfseries\color{titleblue}}{\thesection.}{0.5em}{}
@@ -58,7 +59,7 @@
     arc=2mm,
     left=3mm,right=3mm,top=2mm,bottom=2mm,
     width=\linewidth,
-    height=1.8cm
+    height=1.55cm
   ]
   {\small\color{gray!80!black}#1}\\[2pt]
   {\Large\bfseries\color{titleblue}#2}
@@ -100,11 +101,49 @@
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{../../outputs/submission/figures/cash_flow_chart.png}
+  \includegraphics[width=0.94\textwidth]{../../outputs/submission/figures/cash_flow_chart.png}
   \caption{Tax-free operating cash flow and occupancy by year}
 \end{figure}
 
-\section{年度现金流与改造期判断}
+\section{建模框架与方法}
+
+本案例采用\textbf{年度口径 DCF 模型}。时间轴设定为：\texttt{2026-01-01} 收购，\texttt{2026-04-01} 开业，\texttt{2029-12-31} 退出。为满足题意，\texttt{2026} 年视为改造与招商爬坡期，\texttt{2027-2029} 年视为稳定经营期。模型不考虑折旧，仅保留项目经营相关的现金流入与现金流出。
+
+关键现金流构造如下：
+\begin{align*}
+\text{Rent}_t &= \sum_i \left(A_i \times R_i \times D_t \times Occ_t \times g_t \right) \\
+\text{Parking}_t &= P \times p_h \times h_d \times u_t \times OD_t \\
+\text{PropertyFee}_t &= A_{\text{rentable}} \times Occ_t \times f_m \times M_t \\
+\text{Opex}_t &= \text{Personnel}_t+\text{Marketing}_t+\text{Repair}_t+\text{PM}_t+\text{Energy}_t+\text{Admin}_t+\text{CapexReno}_t \\
+\text{Tax}_t &= \max(\text{Income}_t-\text{Opex}_t,0)\times 25\%
+\end{align*}
+
+其中，\texttt{2026} 年仅收取 \textbf{6 个月租金}，但\textbf{收取 9 个月物业费}；停车费按实际营业天数计收；运营成本按开业后的 9 个月折算。退出价值采用永续年金模型：
+\[
+\text{TV}_{2029}=\frac{\text{ATCF}_{2029}}{8\%}
+\]
+合理收购价按题目给定的 \texttt{MARR = 12\%} 反推：
+\[
+\text{Purchase Price}=\frac{\sum_{t=2026}^{2029}\frac{\text{ATCF}_{t}}{(1+12\%)^{t-2025}}+\frac{\text{TV}_{2029}}{(1+12\%)^4}-\text{Opening Cost}-\text{Other Fees}}{1+3\%}
+\]
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}l >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X}
+    \toprule
+    关键参数 & 数值 & 含义 & 对估值的影响方向 \\
+    \midrule
+    MARR & 12\% & 投资门槛收益率 & 越高则估值越低 \\
+    Exit cap rate & 8\% & 退出资本化率 & 越高则退出价值越低 \\
+    2027--2029 occupancy & 95\% & 稳定期出租率 & 越高则经营现金流越强 \\
+    2029 rent growth & 3\% & 稳定期末租金增速 & 越高则终值越高 \\
+    Capex renovation ratio & 2.5\% & 资本性改造支出/租金比 & 越高则经营现金流越低 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{收入与经营爬坡}
 
 \begin{table}[H]
   \centering
@@ -123,17 +162,55 @@
 
 \texttt{2029} 年末退出价值按永续年金估算约为 \textbf{4.42 亿元}，其折现值约为 \textbf{2.81 亿元}，是整体估值的主要来源。因此，本项目对稳定期经营现金流的兑现能力高度敏感，尤其依赖招商兑现和持续运营。
 
-按季度观察，\texttt{2026Q1} 尚未开业，没有经营收入；\texttt{2026Q2} 由于处于免租期，仅有停车费和物业费收入，经营现金流仍为负；到了 \texttt{2026Q3} 与 \texttt{2026Q4}，租金开始计收，季度经营现金流迅速转正。这说明改造期与稳定期之间存在显著台阶式改善，项目的首要矛盾不是长期租金单价，而是能否按计划完成招商和正式收租。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../outputs/submission/figures/income_mix_chart.png}
+  \caption{Revenue mix by year}
+\end{figure}
 
-\section{敏感性分析}
+从收入结构看，\textbf{租金收入}始终是核心驱动项，\texttt{2027} 年以后稳定在 \textbf{5400--5600 万元}区间；\textbf{物业费}对总收入的贡献较稳定，起到一定防守作用；\textbf{停车收入}随项目恢复营业和车位利用率提升而逐年增长。这一结构意味着，只要出租率兑现，项目具备较强的稳定现金流基础。
+
+按季度观察，\texttt{2026Q1} 尚未开业，没有经营收入；\texttt{2026Q2} 由于处于免租期，仅有停车费和物业费收入，经营现金流仍为负；到了 \texttt{2026Q3} 与 \texttt{2026Q4}，租金开始计收，季度经营现金流迅速转正。这说明改造期与稳定期之间存在显著台阶式改善，项目的首要矛盾不是长期租金单价，而是能否按计划完成招商和正式收租。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.74\textwidth]{../../outputs/submission/figures/sensitivity_heatmap.png}
+  \includegraphics[width=0.92\textwidth]{../../outputs/submission/figures/quarterly_ramp_chart.png}
+  \caption{2026 quarterly operating ramp-up}
+\end{figure}
+
+\section{成本、税收与估值推导}
+
+成本端方面，\texttt{2026} 年的人事、市场推广、维保维修、物业管理、能耗和行政支出按 9 个月折算；\texttt{2027} 年以后恢复全年口径，并按题目给定的费用增长率递推。与此同时，资本性改造支出按租金收入的 \texttt{2.5\%} 计提，用于反映招商调整和持续改造需求。
+
+税收处理采用单一企业所得税税率 \texttt{25\%}。由于题目明确要求退出价值\textbf{不计税}，因此项目的年度税负只作用于经营期利润，不作用于终值。该处理方式会显著提高退出价值对项目估值的贡献，也解释了为什么最终合理收购价对稳定期现金流较为敏感。
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}l >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X}
+    \toprule
+    估值拆解项 & 金额 & 说明 \\
+    \midrule
+    PV of operating CF, 2026--2029 & 0.83 亿元 & 四年经营现金流折现值 \\
+    PV of terminal value & 2.81 亿元 & 以 2029 年税后现金流永续资本化后再折现 \\
+    Opening cost + other fees & 0.21 亿元 & 开业成本与其他交易费用一次性扣减 \\
+    Stamp duty adjustment & 3\% & 收购价需反推契税影响 \\
+    Recommended purchase price & 3.33 亿元 & 满足 12\% MARR 的估值上限 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{敏感性分析与投资判断}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\textwidth]{../../outputs/submission/figures/sensitivity_heatmap.png}
   \caption{Purchase price sensitivity to occupancy and rent growth}
 \end{figure}
 
-敏感性结果表明，估值对\textbf{出租率}比对\textbf{租金增长率}更敏感。在基准增长率 \texttt{3\%} 下，稳定期出租率从 \texttt{95\%} 下调到 \texttt{90\%}，估值下降约 \textbf{2480 万元}；而在基准出租率 \texttt{95\%} 下，租金增长率从 \texttt{3\%} 降到 \texttt{0\%}，估值下降约 \textbf{990 万元}。因此，真正决定项目成败的核心变量是招商兑现能力，而非小幅租金提价。
+敏感性结果表明，估值对\textbf{出租率}比对\textbf{租金增长率}更敏感。在基准增长率 \texttt{3\%} 下，稳定期出租率从 \texttt{95\%} 下调到 \texttt{90\%}，估值下降约 \textbf{2480 万元}；而在基准出租率 \texttt{95\%} 下，租金增长率从 \texttt{3\%} 降到 \texttt{0\%}，估值下降约 \textbf{990 万元}。换句话说，本项目更像是一个\textbf{招商执行型投资}，而不是简单的\textbf{租金增长型投资}。
+
+从区间上看，即便在乐观情形下（稳定期出租率 \texttt{100\%}，\texttt{2029} 年租金增长 \texttt{5\%}），合理估值也约为 \textbf{3.64 亿元}；在偏保守情形下（稳定期出租率 \texttt{90\%}，\texttt{2029} 年租金增长 \texttt{0\%}），估值回落至 \textbf{2.98 亿元}。因此，若卖方要价高于 \textbf{3.4 亿元}，则必须以极强的招商兑现作为前提，安全边际已经不足。
 
 \section{非财务风险与运营建议}
 

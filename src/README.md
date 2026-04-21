@@ -1,9 +1,16 @@
 # `src`
 
-Put reusable scripts here.
+Repository scripts are organized by responsibility.
 
-Likely scripts for this case:
+- `analysis/`
+  Core model logic, assumptions, and reusable cash flow calculations.
+- `excel/`
+  Builders for the submission workbook and any spreadsheet-specific exports.
+- `reporting/`
+  Figure generation and report assembly helpers.
 
-- extracting assumptions from the workbook
-- generating a clean cash flow table
-- exporting sensitivity analysis results
+Compatibility entrypoints remain at the root of `src/` so existing commands still work:
+
+- `calculate_case_study.py`
+- `generate_report_figures.py`
+- `build_submission.py`
