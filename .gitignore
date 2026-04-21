@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+~$*.xlsx
+~$*.xlsm
+*.tmp
+*.bak
+outputs/*
+!outputs/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
