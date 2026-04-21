@@ -13,6 +13,7 @@ Build a defendable investment recommendation for the Ningbo Yifenghui shopping m
 
 ## Repository Layout
 
+- `CaseStudy/`: original assignment folder kept at repository root for direct access
 - `docs/assignment/`: original assignment prompt and reference materials
 - `docs/project/`: project management, branch rules, and task breakdown
 - `docs/analysis/`: working notes, model logic, and writeup drafts
@@ -37,6 +38,7 @@ Build a defendable investment recommendation for the Ningbo Yifenghui shopping m
 
 ## Current Inputs
 
+- Root assignment folder: `CaseStudy/`
 - Assignment brief: `docs/assignment/EE2025 Case Study.docx`
 - Source workbook: `data/raw/EE2025 Case Study Sheet.xlsm`
 - Original archive: `data/raw/CaseStudy.zip`
