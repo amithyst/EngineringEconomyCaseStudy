@@ -4,6 +4,9 @@ Thumbs.db
 ~$*.xlsm
 *.tmp
 *.bak
+*.aux
+*.log
+*.out
 outputs/*
 !outputs/.gitkeep
 data/processed/*

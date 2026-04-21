@@ -1,0 +1,138 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[a4paper,margin=1.35cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{caption}
+
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=black}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{titleblue}{HTML}{243B53}
+\definecolor{accent}{HTML}{A23E48}
+\definecolor{softblue}{HTML}{EDF3F8}
+\definecolor{softgray}{HTML}{F5F7FA}
+\definecolor{linegray}{HTML}{D9E2EC}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setstretch{1.06}
+\captionsetup{font=small}
+
+\titleformat{\section}{\large\bfseries\color{titleblue}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{titleblue}}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{8pt}{5pt}
+\titlespacing*{\subsection}{0pt}{5pt}{3pt}
+
+\newcommand{\metricbox}[2]{
+  \begin{tcolorbox}[
+    enhanced,
+    colback=softblue,
+    colframe=linegray,
+    boxrule=0.4pt,
+    arc=2mm,
+    left=3mm,right=3mm,top=2mm,bottom=2mm,
+    width=\linewidth,
+    height=1.8cm
+  ]
+  {\small\color{gray!80!black}#1}\\[2pt]
+  {\Large\bfseries\color{titleblue}#2}
+  \end{tcolorbox}
+}
+
+\begin{document}
+
+\begin{center}
+  {\fontsize{18}{21}\selectfont\bfseries\color{titleblue} 宁波怡丰汇商业项目案例研究报告}\\[6pt]
+  {\small 工程经济学 Case Study}\\[4pt]
+  {\small 姓名与学号：\texttt{[待填写组员姓名与学号]}}
+\end{center}
+
+\vspace{3pt}
+\begin{center}
+\begin{minipage}[t]{0.47\textwidth}
+\metricbox{Recommended Purchase Price}{3.33 亿元}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}
+\metricbox{Initial Total Investment}{3.64 亿元}
+\end{minipage}
+
+\vspace{3pt}
+
+\begin{minipage}[t]{0.47\textwidth}
+\metricbox{Terminal Value}{4.42 亿元}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}
+\metricbox{Target MARR}{12\%}
+\end{minipage}
+\end{center}
+
+\section{投资结论}
+
+基于题目给定假设，在 \texttt{MARR = 12\%}、退出资本化率 \texttt{8\%} 的条件下，本项目的合理收购对价约为 \textbf{3.33 亿元}。对应的初始总投资额约为 \textbf{3.64 亿元}，其中已包含收购对价、\texttt{3\%} 契税、\texttt{1100 万元}其他交易费用及 \texttt{1000 万元}开业成本。
+
+项目在 \texttt{2026} 年处于改造与招商阶段，经营现金流明显低于稳定期；从 \texttt{2027} 年开始，出租率提升至 \texttt{95\%} 后，现金流进入稳定区间。若卖方报价明显高于 \textbf{3.33 亿元}，则项目难以满足 \texttt{12\%} 的最低可接受报酬率要求，因此该价格应视为投资上限而非议价起点。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../outputs/submission/figures/cash_flow_chart.png}
+  \caption{Tax-free operating cash flow and occupancy by year}
+\end{figure}
+
+\section{年度现金流与改造期判断}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}l >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X}
+    \toprule
+    年份 & 税后经营现金流 & 稳定期出租率 & 核心判断 \\
+    \midrule
+    2026 & 1102.66 万元 & 80\% & 改造+免租阶段，仅实现 6 个月租金收入 \\
+    2027 & 3324.53 万元 & 95\% & 招商落地后现金流明显抬升 \\
+    2028 & 3376.84 万元 & 95\% & 进入稳定经营阶段 \\
+    2029 & 3534.27 万元 & 95\% & 现金流小幅增长，并形成退出估值基础 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\texttt{2029} 年末退出价值按永续年金估算约为 \textbf{4.42 亿元}，其折现值约为 \textbf{2.81 亿元}，是整体估值的主要来源。因此，本项目对稳定期经营现金流的兑现能力高度敏感，尤其依赖招商兑现和持续运营。
+
+按季度观察，\texttt{2026Q1} 尚未开业，没有经营收入；\texttt{2026Q2} 由于处于免租期，仅有停车费和物业费收入，经营现金流仍为负；到了 \texttt{2026Q3} 与 \texttt{2026Q4}，租金开始计收，季度经营现金流迅速转正。这说明改造期与稳定期之间存在显著台阶式改善，项目的首要矛盾不是长期租金单价，而是能否按计划完成招商和正式收租。
+
+\section{敏感性分析}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.74\textwidth]{../../outputs/submission/figures/sensitivity_heatmap.png}
+  \caption{Purchase price sensitivity to occupancy and rent growth}
+\end{figure}
+
+敏感性结果表明，估值对\textbf{出租率}比对\textbf{租金增长率}更敏感。在基准增长率 \texttt{3\%} 下，稳定期出租率从 \texttt{95\%} 下调到 \texttt{90\%}，估值下降约 \textbf{2480 万元}；而在基准出租率 \texttt{95\%} 下，租金增长率从 \texttt{3\%} 降到 \texttt{0\%}，估值下降约 \textbf{990 万元}。因此，真正决定项目成败的核心变量是招商兑现能力，而非小幅租金提价。
+
+\section{非财务风险与运营建议}
+
+除财务模型外，本项目至少面临四类现实风险。第一，\textbf{招商执行风险}。项目当前处于半停业状态，原有租户水平偏低，若重组后的品牌组合不足以恢复客流，模型中的高出租率无法实现。第二，\textbf{主力店信用风险}。影院、健身、大型餐饮等主力业态虽然引流能力强，但若客流恢复慢于预期，租金拖欠与退租概率会显著上升。第三，\textbf{同业竞争与消费分流风险}。项目周边已有多个成熟居住社区和商业体，若定位不清晰，则容易陷入同质化竞争。第四，\textbf{运营爬坡风险}。地铁通车预期有利于导流，但其效果可能滞后于招商与租金兑现。
+
+若由我负责运营与招商，我会优先构建“\textbf{社区高频消费 + 少量目的性主力店}”的组合。主力业态应优先考虑精品超市、儿童教育与亲子娱乐、连锁餐饮、生活服务及轻运动健康，而不是过度押注高票房依赖的大体量主力店。社区型购物中心的稳健性本质上来自高频到访和刚性消费；通过提升日常客流，可以同步带动餐饮、零售和停车收入，使现金流结构更加稳定。
+
+\section{最终建议}
+
+综合现金流结果、敏感性分析与运营判断，我认为本项目\textbf{可以考虑收购}，但前提是收购对价应控制在 \textbf{3.33 亿元左右或以下}，并由具备社区型商业运营经验的团队负责改造与招商。如果卖方报价显著高于该水平，则项目难以满足 \texttt{12\%} 的收益率要求，投资安全边际不足，不建议出手。
+
+\end{document}
