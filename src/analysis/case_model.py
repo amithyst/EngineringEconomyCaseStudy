@@ -252,10 +252,11 @@ def build_floor_rent_table() -> list[list[object]]:
 
 def build_sensitivity_rows() -> list[dict[str, float]]:
     sensitivity_rows = []
-    for stabilized_occupancy in (0.90, 0.95, 1.00):
+    for stabilized_occupancy in (0.70, 0.75, 0.80, 0.85, 0.90, 0.95):
         row = {"stabilized_occupancy": stabilized_occupancy}
-        for terminal_rent_growth in (0.00, 0.03, 0.05):
-            scenario_key = f"rent_growth_{int(terminal_rent_growth * 100):02d}pct"
+        for terminal_rent_growth in (-0.03, 0.00, 0.03, 0.05, 0.08):
+            pct = int(round(terminal_rent_growth * 100))
+            scenario_key = f"rent_growth_{pct:+03d}pct".replace("+", "").replace("-", "neg")
             row[scenario_key] = scenario_purchase_price(stabilized_occupancy, terminal_rent_growth)
         sensitivity_rows.append(row)
     return sensitivity_rows
@@ -347,13 +348,15 @@ def export_outputs(case_data: dict) -> None:
         ])
 
     sensitivity_csv_rows = [[
-        "Stabilized Occupancy", "Purchase Price @ 0% Rent Growth",
-        "Purchase Price @ 3% Rent Growth", "Purchase Price @ 5% Rent Growth"
+        "Stabilized Occupancy", "Purchase Price @ -3% Rent Growth",
+        "Purchase Price @ 0% Rent Growth", "Purchase Price @ 3% Rent Growth",
+        "Purchase Price @ 5% Rent Growth", "Purchase Price @ 8% Rent Growth"
     ]]
     for row in sensitivity:
         sensitivity_csv_rows.append([
-            row["stabilized_occupancy"], row["rent_growth_00pct"],
-            row["rent_growth_03pct"], row["rent_growth_05pct"],
+            row["stabilized_occupancy"], row["rent_growth_neg03pct"],
+            row["rent_growth_00pct"], row["rent_growth_03pct"],
+            row["rent_growth_05pct"], row["rent_growth_08pct"],
         ])
 
     write_csv(OUTPUT_DIR / "cash_flow_table.csv", cash_flow_csv_rows)

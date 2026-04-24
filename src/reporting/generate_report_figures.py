@@ -49,11 +49,11 @@ def make_cash_flow_chart(data: dict) -> None:
     ax2.tick_params(axis="y", colors="#A23E48")
     ax2.set_ylim(70, 100)
     ax.text(
-        0.98,
-        0.96,
+        0.03,
+        0.88,
         f"Purchase price cap: {purchase_price:.2f} bn RMB",
         transform=ax.transAxes,
-        ha="right",
+        ha="left",
         va="top",
         fontsize=9.5,
         color="#4B5563",
@@ -109,11 +109,12 @@ def make_quarterly_chart(data: dict) -> None:
 
 def make_sensitivity_chart(data: dict) -> None:
     sensitivity = data["sensitivity"]
-    growth_labels = ["0%", "3%", "5%"]
+    growth_keys = ["rent_growth_neg03pct", "rent_growth_00pct", "rent_growth_03pct", "rent_growth_05pct", "rent_growth_08pct"]
+    growth_labels = ["-3%", "0%", "3%", "5%", "8%"]
     occ_labels = [f"{int(row['stabilized_occupancy'] * 100)}%" for row in sensitivity]
-    matrix = [[row["rent_growth_00pct"] / 1e8, row["rent_growth_03pct"] / 1e8, row["rent_growth_05pct"] / 1e8] for row in sensitivity]
+    matrix = [[row[key] / 1e8 for key in growth_keys] for row in sensitivity]
     cmap = LinearSegmentedColormap.from_list("case_study", ["#E9F1F7", "#A8C5D6", "#6E8FA8", "#34526F"])
-    fig, ax = plt.subplots(figsize=(6.2, 3.6), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(7.4, 4.8), constrained_layout=True)
     im = ax.imshow(matrix, cmap=cmap, aspect="auto")
     ax.set_title("Sensitivity of Purchase Price", fontsize=13, fontweight="bold", loc="left")
     ax.set_xticks(range(len(growth_labels)), growth_labels)
@@ -122,7 +123,7 @@ def make_sensitivity_chart(data: dict) -> None:
     ax.set_ylabel("Stabilized Occupancy")
     for i, row in enumerate(matrix):
         for j, value in enumerate(row):
-            ax.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=10, fontweight="bold")
+            ax.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=9.5, fontweight="bold")
     cbar = fig.colorbar(im, ax=ax, shrink=0.9)
     cbar.set_label("Purchase Price (bn RMB)")
     fig.savefig(FIGURE_DIR / "sensitivity_heatmap.png", dpi=220, bbox_inches="tight")
