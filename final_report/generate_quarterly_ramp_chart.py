@@ -14,9 +14,9 @@ def font(name: str, size: int, weight: str = "normal") -> FontProperties:
     return FontProperties(fname=str(FONT_DIR / name), size=size, weight=weight)
 
 
-FONT = font("NotoSerifCJKsc-Regular.otf", 11)
-FONT_BOLD = font("NotoSerifCJKsc-Bold.otf", 11, "bold")
-FONT_SMALL = font("NotoSerifCJKsc-Regular.otf", 9)
+FONT = font("NotoSerifCJKsc-Regular.otf", 12)
+FONT_BOLD = font("NotoSerifCJKsc-Bold.otf", 12, "bold")
+FONT_SMALL = font("NotoSerifCJKsc-Regular.otf", 10)
 FONT_TITLE = font("NotoSerifCJKsc-Bold.otf", 15, "bold")
 
 
@@ -36,45 +36,50 @@ def main() -> None:
     blue_light = "#AFC8DD"
     gray = "#8796A5"
     red = "#A23E48"
-    axis = "#2F3A45"
+    axis = "#1A1A1A"
     grid = "#D8DEE6"
 
-    fig, ax = plt.subplots(figsize=(9.2, 4.8), dpi=240)
+    fig, ax = plt.subplots(figsize=(9.2, 5.0), dpi=240)
     ax.set_facecolor("white")
 
-    ax.bar([i - width / 2 for i in x], total_income, width=width, label="经营收入", color=blue_light, edgecolor="white", linewidth=0.8)
-    ax.bar([i + width / 2 for i in x], allocated_opex, width=width, label="O&M 成本", color=gray, edgecolor="white", linewidth=0.8)
-    ax.plot(x, pretax_cf, color=red, marker="o", markersize=5.0, linewidth=2.2, label="税前经营现金流")
+    ax.bar(
+        [i - width / 2 for i in x], total_income, width=width,
+        label="经营收入", color=blue_light, edgecolor="white", linewidth=0.8,
+    )
+    ax.bar(
+        [i + width / 2 for i in x], allocated_opex, width=width,
+        label="O&M 成本", color=gray, edgecolor="white", linewidth=0.8,
+    )
+    ax.plot(x, pretax_cf, color=red, marker="o", markersize=5.5, linewidth=2.4, label="税前经营现金流", zorder=5)
 
     for i, (inc, cost, cf) in enumerate(zip(total_income, allocated_opex, pretax_cf)):
         if inc > 0:
-            ax.text(i - width / 2, inc + 40, f"{inc:.0f}", ha="center", va="bottom", fontproperties=FONT_SMALL, color=blue)
+            ax.text(i - width / 2, inc + 38, f"{inc:.0f}", ha="center", va="bottom", fontproperties=FONT_SMALL, color=blue)
         if cost > 0:
-            ax.text(i + width / 2, cost + 40, f"{cost:.0f}", ha="center", va="bottom", fontproperties=FONT_SMALL, color=axis)
-        offset = 55 if cf >= 0 else -70
+            ax.text(i + width / 2, cost + 38, f"{cost:.0f}", ha="center", va="bottom", fontproperties=FONT_SMALL, color=axis)
+        offset = 52 if cf >= 0 else -68
         va = "bottom" if cf >= 0 else "top"
         ax.text(i, cf + offset, f"{cf:.0f}", ha="center", va=va, fontproperties=FONT_BOLD, color=red)
 
-    ax.annotate(
-        "Q3 起租金计收，\n季度现金流转正",
-        xy=(2, pretax_cf[2]),
-        xytext=(2.35, 1120),
-        textcoords="data",
-        arrowprops={"arrowstyle": "->", "color": red, "lw": 1.0},
+    # Text note directly above Q3's "873" label, no arrow
+    ax.text(
+        2, pretax_cf[2] + 52 + 140,
+        "Q3 起租金计收\n季度现金流转正",
+        ha="center", va="bottom",
         fontproperties=FONT_SMALL,
         color=axis,
-        ha="left",
-        va="center",
     )
 
     ax.set_xticks(x)
     ax.set_xticklabels([])
     for i, (quarter, stage) in enumerate(zip(quarters, stage_labels)):
-        label_box = {"facecolor": "white", "edgecolor": "none", "alpha": 1.0, "pad": 1.4}
-        ax.text(i, -58, quarter, ha="center", va="top", fontproperties=FONT_SMALL, color=axis, bbox=label_box, zorder=6)
-        ax.text(i, -138, stage, ha="center", va="top", fontproperties=FONT_SMALL, color=axis, bbox=label_box, zorder=6)
+        label_box = {"facecolor": "none", "edgecolor": "none", "pad": 1.4}
+        # quarter label just below the x-axis spine (y=0)
+        ax.text(i, -55, quarter, ha="center", va="top", fontproperties=FONT_SMALL, color=axis, bbox=label_box, zorder=4)
+        # stage label further below with a clear gap from the quarter label
+        ax.text(i, -220, stage, ha="center", va="top", fontproperties=FONT_SMALL, color=axis, bbox=label_box, zorder=4)
     ax.set_ylabel("金额（万元）", fontproperties=FONT, color=axis)
-    ax.set_ylim(-520, 1580)
+    ax.set_ylim(-620, 1640)
     ax.set_xlim(-0.55, 3.55)
     ax.grid(axis="y", linestyle="--", linewidth=0.8, color=grid, alpha=0.75)
     ax.set_axisbelow(True)
@@ -89,10 +94,9 @@ def main() -> None:
 
     handles, labels = ax.get_legend_handles_labels()
     legend = fig.legend(
-        handles,
-        labels,
+        handles, labels,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.845),
+        bbox_to_anchor=(0.5, 0.850),
         ncol=3,
         frameon=False,
         prop=FONT_SMALL,
@@ -104,24 +108,18 @@ def main() -> None:
 
     fig.suptitle(
         "2026 年季度经营现金流改善",
-        x=0.5,
-        y=0.965,
-        ha="center",
-        va="top",
-        fontproperties=FONT_TITLE,
-        color=axis,
+        x=0.5, y=0.970,
+        ha="center", va="top",
+        fontproperties=FONT_TITLE, color=axis,
     )
     fig.text(
-        0.5,
-        0.895,
+        0.5, 0.900,
         "单位：万元；税前经营现金流 = 经营收入 - 当季分摊 O&M 成本",
-        ha="center",
-        va="top",
-        fontproperties=FONT_SMALL,
-        color="#5D6670",
+        ha="center", va="top",
+        fontproperties=FONT_SMALL, color="#1A1A1A",
     )
 
-    fig.subplots_adjust(left=0.09, right=0.985, bottom=0.14, top=0.72)
+    fig.subplots_adjust(left=0.09, right=0.985, bottom=0.18, top=0.72)
     fig.savefig(OUT, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
