@@ -9,11 +9,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.font_manager import FontProperties
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_PATH = REPO_ROOT / "outputs" / "case_study_results.json"
 FIGURE_DIR = REPO_ROOT / "final_report" / "figures"
+FONT_DIR = REPO_ROOT / "final_report" / "fonts"
 
 # Unified colour palette
 _P = {
@@ -37,6 +39,11 @@ TICK_SZ = 10
 DATA_SZ = 10
 ANNOT_SZ = 10
 LEGEND_SZ = 10
+
+
+FONT_CN = FontProperties(fname=str(FONT_DIR / "NotoSerifCJKsc-Regular.otf"), size=LABEL_SZ)
+FONT_CN_TITLE = FontProperties(fname=str(FONT_DIR / "NotoSerifCJKsc-Bold.otf"), size=TITLE_SZ, weight="bold")
+FONT_CN_SMALL = FontProperties(fname=str(FONT_DIR / "NotoSerifCJKsc-Regular.otf"), size=LEGEND_SZ)
 
 
 def setup_style() -> None:
@@ -74,10 +81,10 @@ def make_cash_flow_chart(data: dict) -> None:
     bars = ax.bar(years, cashflows, color=bar_colors, width=0.55, zorder=3)
 
     ax.set_title(
-        "Tax-Free Operating Cash Flow by Year",
-        fontsize=TITLE_SZ, fontweight="bold", loc="left", pad=8, color=_P["text"],
+        "年度税后经营现金流",
+        fontproperties=FONT_CN_TITLE, loc="left", pad=8, color=_P["text"],
     )
-    ax.set_ylabel("Million RMB", fontsize=LABEL_SZ, color=_P["text"])
+    ax.set_ylabel("金额（百万元）", fontproperties=FONT_CN, color=_P["text"])
     ax.tick_params(labelsize=TICK_SZ)
     ax.grid(axis="y", linestyle="--", alpha=0.45, color=_P["grid"], zorder=0)
     ax.set_axisbelow(True)
@@ -96,7 +103,7 @@ def make_cash_flow_chart(data: dict) -> None:
     ax2 = ax.twinx()
     occ = [item["occupancy"] * 100 for item in annual]
     ax2.plot(years, occ, color=_P["occ"], marker="o", linewidth=2.2, markersize=5, zorder=4)
-    ax2.set_ylabel("Occupancy (%)", fontsize=LABEL_SZ, color=_P["occ"])
+    ax2.set_ylabel("出租率（%）", fontproperties=FONT_CN, color=_P["occ"])
     ax2.tick_params(axis="y", colors=_P["occ"], labelsize=TICK_SZ)
     ax2.set_ylim(60, 100)
     ax2.spines["right"].set_visible(True)
@@ -106,10 +113,10 @@ def make_cash_flow_chart(data: dict) -> None:
     # Annotation in upper-left, visually below the chart title
     ax.text(
         0.02, 0.97,
-        f"Purchase price cap: {purchase_price:.2f} bn RMB",
+        f"收购对价上限：{purchase_price:.2f} 亿元",
         transform=ax.transAxes,
         ha="left", va="top",
-        fontsize=ANNOT_SZ, color=_P["text"],
+        fontproperties=FONT_CN_SMALL, color=_P["text"],
         bbox={"boxstyle": "round,pad=0.3", "facecolor": _P["ann_bg"], "edgecolor": _P["ann_edge"]},
     )
 
@@ -125,15 +132,15 @@ def make_income_mix_chart(data: dict) -> None:
     property_fee = [item["property_fee_income"] / 1e6 for item in annual]
 
     fig, ax = plt.subplots(figsize=(7.5, 4.0), constrained_layout=True)
-    ax.bar(years, rent, label="Rent", color=_P["rent"], zorder=3)
-    ax.bar(years, parking, bottom=rent, label="Parking", color=_P["parking"], zorder=3)
+    ax.bar(years, rent, label="租金", color=_P["rent"], zorder=3)
+    ax.bar(years, parking, bottom=rent, label="停车费", color=_P["parking"], zorder=3)
     bottoms = [a + b for a, b in zip(rent, parking)]
-    ax.bar(years, property_fee, bottom=bottoms, label="Property Fee", color=_P["prop_fee"], zorder=3)
+    ax.bar(years, property_fee, bottom=bottoms, label="物业费", color=_P["prop_fee"], zorder=3)
 
-    ax.set_title("Revenue Mix by Year", fontsize=TITLE_SZ, fontweight="bold", loc="left", pad=8, color=_P["text"])
-    ax.set_ylabel("Million RMB", fontsize=LABEL_SZ, color=_P["text"])
+    ax.set_title("年度收入结构", fontproperties=FONT_CN_TITLE, loc="left", pad=8, color=_P["text"])
+    ax.set_ylabel("金额（百万元）", fontproperties=FONT_CN, color=_P["text"])
     ax.tick_params(labelsize=TICK_SZ)
-    ax.legend(frameon=False, ncol=3, loc="upper left", fontsize=LEGEND_SZ)
+    ax.legend(frameon=False, ncol=3, loc="upper left", prop=FONT_CN_SMALL)
     ax.grid(axis="y", linestyle="--", alpha=0.45, color=_P["grid"], zorder=0)
     ax.set_axisbelow(True)
     _spine_light(ax)
@@ -167,15 +174,15 @@ def make_sensitivity_chart(data: dict) -> None:
     im = ax.imshow(matrix, cmap=cmap, aspect="auto", vmin=vmin, vmax=vmax)
 
     ax.set_title(
-        "Sensitivity of Purchase Price (bn RMB)",
-        fontsize=TITLE_SZ, fontweight="bold", loc="left", pad=8, color=_P["text"],
+        "收购价格敏感性分析（亿元）",
+        fontproperties=FONT_CN_TITLE, loc="left", pad=8, color=_P["text"],
     )
     ax.set_xticks(range(len(growth_labels)))
     ax.set_xticklabels(growth_labels, fontsize=TICK_SZ)
     ax.set_yticks(range(len(occ_labels)))
     ax.set_yticklabels(occ_labels, fontsize=TICK_SZ)
-    ax.set_xlabel("2029 Rent Growth", fontsize=LABEL_SZ, color=_P["text"])
-    ax.set_ylabel("Stabilized Occupancy", fontsize=LABEL_SZ, color=_P["text"])
+    ax.set_xlabel("2029 年租金增长率", fontproperties=FONT_CN, color=_P["text"])
+    ax.set_ylabel("稳定期出租率", fontproperties=FONT_CN, color=_P["text"])
 
     norm_range = vmax - vmin
     for i, row in enumerate(matrix):
@@ -189,7 +196,7 @@ def make_sensitivity_chart(data: dict) -> None:
             )
 
     cbar = fig.colorbar(im, ax=ax, shrink=0.85, pad=0.02)
-    cbar.set_label("Purchase Price (bn RMB)", fontsize=LEGEND_SZ, color=_P["text"])
+    cbar.set_label("收购价格（亿元）", fontproperties=FONT_CN_SMALL, color=_P["text"])
     cbar.ax.tick_params(labelsize=TICK_SZ - 1)
 
     fig.savefig(FIGURE_DIR / "sensitivity_heatmap.png", dpi=240, bbox_inches="tight")

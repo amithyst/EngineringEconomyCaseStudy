@@ -17,6 +17,7 @@ def font(name: str, size: int, weight: str = "normal") -> FontProperties:
 FONT_CN = font("NotoSerifCJKsc-Regular.otf", 10)
 FONT_CN_BOLD = font("NotoSerifCJKsc-Bold.otf", 10, "bold")
 FONT_SMALL = font("NotoSerifCJKsc-Regular.otf", 8)
+FONT_TITLE = font("NotoSerifCJKsc-Bold.otf", 13, "bold")
 
 
 def draw_arrow(ax, x, y0, y1, color, width=2.6):
@@ -117,10 +118,9 @@ def main() -> None:
 
     ax.text(
         -0.48, 3.12,
-        "Cash Flow Diagram from Buyer's Viewpoint",
+        "项目现金流图（买方视角）",
         ha="left", va="top",
-        fontsize=13, fontweight="bold",
-        family="Times New Roman", color="#1A1A1A",
+        fontproperties=FONT_TITLE, color="#1A1A1A",
     )
     ax.text(
         -0.48, 2.72,
