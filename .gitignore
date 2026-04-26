@@ -13,3 +13,5 @@ outputs/*
 !outputs/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+final_report/backups/
+final_report/excel_*review*/
